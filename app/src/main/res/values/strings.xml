@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">電子發票程式</string>
+    <string name="version">1225電字發票程式</string>
+    <string name="Port">9100</string>
+    <string name="InvoiceIP">192.168.123.101</string>
+    <string name="AccountsIP">192.168.123.100</string>
+    <string name="LabelIP">192.168.123.5</string>
+    <string name="WebSite">xmltest.551.com.tw</string>
+    <string name="POSID">pos1</string>
+    <string name="POSSN">86db8521c29bd4d38370</string>
+    <string name="SELLERID"></string>
+    <string name="InvoiceTitle">智慧數碼</string>
+    <string name="Commodity">餐費</string>
+    <string name="StoreID">le00000115</string>
+    <string name="WebStie">xml.551.com.tw</string>
+
+</resources>

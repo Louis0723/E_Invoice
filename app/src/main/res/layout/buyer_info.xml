@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:background="#81D8D0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text"
+            android:text="買方資訊"
+            android:textSize="25dp"
+            android:padding="20dp"
+            android:textColor="#000000"
+            android:gravity="center_vertical" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_margin="10dp"
+                android:text="統編:"
+                android:layout_gravity="center"
+                android:textSize="25dp"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+
+                android:layout_margin="1dp"
+                android:text=""
+                android:id="@+id/BUYERID"
+                android:textColor="#000000"
+                android:maxLength="8"
+                android:layout_gravity="center|left"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_margin="10dp"
+                android:text="載具:"
+                android:layout_gravity="center"
+                android:textSize="25dp"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_margin="1dp"
+                android:text=""
+                android:maxLength="16"
+                android:id="@+id/VehicleNumber"
+                android:textColor="#000000"
+                android:layout_gravity="center|left"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="愛心碼:"
+                android:textSize="25dp"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="8"
+                android:textColor="#000000"
+                android:layout_margin="10dp"
+                android:text=""
+                android:inputType="number"
+                android:id="@+id/LOVENUMBER"
+                android:maxLength="7"
+                android:layout_gravity="center|left"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            >
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="印製交易明細"
+                android:textSize="25dp"
+                android:textColor="#000000"
+                android:id="@+id/details"
+                />
+
+        </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|left"
+        >
+
+            />
+
+    </LinearLayout>
+
+    </LinearLayout>
