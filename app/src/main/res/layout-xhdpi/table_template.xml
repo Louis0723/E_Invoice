@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/round2"
+    >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="88"
+    android:tag="發票號碼"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:id="@+id/INVOICENUMBER"
+    />
+<TextView
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+
+    android:tag="交易序號"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:id="@+id/Serial"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="115"
+        android:tag="金額"
+        android:textSize="20dp"
+        android:layout_gravity="right"
+        android:gravity="center|right"
+        android:id="@+id/Amount"
+        />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="100"
+    android:tag="時間"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:id="@+id/Time"
+    />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="115"
+    android:tag="作廢與否"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:id="@+id/CANCEL_REASON"
+    />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="115"
+    android:tag="已上傳"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:id="@+id/upload"
+    />
+
+</LinearLayout>
