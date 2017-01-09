@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.Inflater;
@@ -111,7 +112,8 @@ public class BuyerInfo {
                 Button btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(View view)
+                    {
                         String BUYERID = buyeridE.getText().toString();
                         String VehicleNumber = vehicleNumber.getText().toString();
                         String LoveNumber = lovenumberE.getText().toString();
@@ -161,21 +163,44 @@ public class BuyerInfo {
                             String MMs=String.format("%02d",MMi%2==0?MMi:MMi+1);
                             SQLite sqLite = new SQLite(context);
                             final SQLiteDatabase db = sqLite.getReadableDatabase();
+                            try {
+                            if(db.rawQuery("Select COUNT(Random) From history Where TAXMONTH='"+yyy+MMs+"' ",null).getCount()<=0)
+                            {
 
-                            if(type.equals("手動")){
-                                Cursor count=db.rawQuery("Select COUNT(Random) From history Where TAXMONTH='"+yyy+MMs+"' ",null);
-                                count.moveToFirst();
-                                No=(count.getInt(0)+1)+"";
-                            }
-                            Module.saveTransactionToDB(context,money,BUYERID,VehicleNumber,LoveNumber,serial,No,details,type);
-
-                            Cursor invoicenumC=db.rawQuery("Select INVOICENUMBER From history Where RANDOM IS NOT NULL AND PRINTYN IS NULL Order By _id Desc",null);
-                            if(invoicenumC.moveToFirst()) {
-                                Module.printIvoice(context, "印發票", invoicenumC.getString(0));
-                                if (details || !BUYERID.equals("") || !VehicleNumber.equals("") || !LoveNumber.equals("")) {
-                                   Module.printIvoice(context, "明細", invoicenumC.getString(0));
+                                Module.getNumberFromMongLi(context);
+                                if (db.rawQuery("Select COUNT(Random) From history Where TAXMONTH='" + yyy + MMs + "' ", null).getCount() <= 0) {
+                                    throw new Exception("無發票號");
                                 }
-                                Module.printIvoice(context, "開錢櫃", invoicenumC.getString(0));
+
+                            }else{
+                                if (type.equals("手動")) {
+                                    Cursor count = db.rawQuery("Select COUNT(Random) From history Where TAXMONTH='" + yyy + MMs + "' ", null);
+                                    count.moveToFirst();
+                                    No = (count.getInt(0) + 1) + "";
+                                }
+                                Module.saveTransactionToDB(context, money, BUYERID, VehicleNumber, LoveNumber, serial, No, details, type);
+
+                                Cursor invoicenumC = db.rawQuery("Select INVOICENUMBER From history Where TAXMONTH='" + yyy + MMs + "' AND RANDOM IS NOT NULL AND PRINTYN IS NULL Order By _id Desc", null);
+                                if (invoicenumC.moveToFirst()) {
+                                    Module.printIvoice(context, "印發票", invoicenumC.getString(0));
+                                    if (details || !BUYERID.equals("") || !VehicleNumber.equals("") || !LoveNumber.equals("")) {
+                                        Module.printIvoice(context, "明細", invoicenumC.getString(0));
+                                    }
+                                    //Module.printIvoice(context, "開錢櫃", invoicenumC.getString(0));
+                                }
+                            }
+                            }catch (Exception e)
+                            {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle("警告");
+                                builder.setMessage("無發票號");
+                                builder.setPositiveButton("確認", null);
+                                AlertDialog ad = builder.create();
+                                ad.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                                ad.show();
+                                e=e;
+
                             }
                             Lock=!Lock;
 

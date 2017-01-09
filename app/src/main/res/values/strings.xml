@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">電子發票程式</string>
-    <string name="version">1225電字發票程式</string>
+    <string name="version">0102電子發票程式</string>
     <string name="Port">9100</string>
+
     <string name="InvoiceIP">192.168.123.101</string>
     <string name="AccountsIP">192.168.123.100</string>
     <string name="LabelIP">192.168.123.5</string>

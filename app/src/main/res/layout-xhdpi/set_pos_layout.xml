@@ -180,6 +180,32 @@
 
             </LinearLayout>
             <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+
+                >
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="連線地址："
+                    android:textSize="25dp"
+                    />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="12"
+                    android:text="@string/WebSite"
+                    android:id="@+id/website"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -369,6 +395,25 @@
                     android:ems="12"
                     android:text="@string/Port"
                     android:id="@+id/labelPort"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="排隊QRCode印製："
+                    android:textSize="25dp"
+
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/QueueQRcode"
+                    android:checked="true"
                     />
             </LinearLayout>
             <LinearLayout

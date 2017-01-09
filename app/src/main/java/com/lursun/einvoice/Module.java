@@ -48,7 +48,7 @@ public class Module {
         c.moveToFirst();
         String SQL="";
         if(c.getInt(0)>0){
-            SQL="Update history SET 'RANDOM'=substr('0000'||Random(),-4, 4),AMOUNT='"+Money+"',BUYERID='"+BUYERID+"',VehicleNumber='"+VehicleNumber+"',LOVENUMBER='"+LoveNumber+"',Serial='"+Serial+"',No='"+No+"',Type='"+type+"',Details='"+(details?"YES":"NO")+"' Where  TAXMONTH='"+yyy+MMs+"'  AND    INVOICENUMBER=(Select INVOICENUMBER From history Where Serial IS NULL AND LOVENUMBER IS NULL AND VehicleNumber IS NULL AND Type IS NULL AND RANDOM IS NULL  AND AMOUNT  IS NULL AND MakeTime IS NULL limit 1 )";
+            SQL="Update history SET 'RANDOM'=substr('0000'||Random(),-4, 4),AMOUNT='"+Money+"',BUYERID='"+BUYERID+"',VehicleNumber='"+VehicleNumber+"',LOVENUMBER='"+LoveNumber+"',Serial='"+Serial+"',No='"+No+"',Type='"+type+"',Details='"+(details?"YES":"NO")+"' Where  TAXMONTH='"+yyy+MMs+"'  AND    INVOICENUMBER=(Select INVOICENUMBER From history Where TAXMONTH='"+yyy+MMs+"'  AND Serial IS NULL AND LOVENUMBER IS NULL AND VehicleNumber IS NULL AND Type IS NULL AND RANDOM IS NULL  AND AMOUNT  IS NULL AND MakeTime IS NULL limit 1 )";
             db.execSQL(SQL);
         }else {
 
@@ -391,7 +391,7 @@ public class Module {
                                 break;
 
                         }
-
+                        epson.Open();
                         epson.Print();
 
                         if (buyerid.equals("")) epson.Cut();
@@ -400,7 +400,10 @@ public class Module {
                     }
                 }
                 String printyn= !buyerid.equals("")?"Y":(!lovenumber.equals("")||!vehiclenumber.equals(""))?"N":"Y";
-
+                ContentValues cv=new ContentValues();
+                cv.put("MakeTime",date);
+                cv.put("PRINTYN",printyn);
+                db.update("history",cv,"INVOICENUMBER='"+Invoice+"'",null);
                 if(type.equals("明細")||printyn.equals("Y")||type.equals("補印")) {
 
                     if (!machine.equals("商米")) {
@@ -427,10 +430,7 @@ public class Module {
                         e = e;
                     }
                 }
-                ContentValues cv=new ContentValues();
-                cv.put("MakeTime",date);
-                cv.put("PRINTYN",printyn);
-                db.update("history",cv,"INVOICENUMBER='"+Invoice+"'",null);
+
             }
         };
         printIvoice.start();
@@ -502,7 +502,7 @@ public class Module {
                         try {
                             hmret=sd.sendTransaction();
 
-                            FileWriter fw= new FileWriter(Environment.getDataDirectory()+InvoiceNumber+".xml",false);
+                            FileWriter fw= new FileWriter(Environment.getExternalStorageDirectory()+"/EInvoice/"+InvoiceNumber+".xml",false);
                             fw.write(sd.xml.getXmlData());
 
                             fw.close();

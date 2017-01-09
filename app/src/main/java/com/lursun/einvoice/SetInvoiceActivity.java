@@ -64,6 +64,7 @@ public class SetInvoiceActivity extends Activity {
         ((EditText) findViewById(R.id.POSSN)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("POSSN")));
         ((EditText) findViewById(R.id.StoreID)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("StoreID")));
         ((EditText) findViewById(R.id.Commodity)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("Commodity")));
+        ((EditText) findViewById(R.id.website)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("WebSite")));
         ((EditText) findViewById(R.id.invoiceIP)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("InvoiceIP")));
         ((EditText) findViewById(R.id.invoicePort)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("InvoicePort")));
         ((EditText) findViewById(R.id.accountsIP)).setText(sellerInfoC.getString(sellerInfoC.getColumnIndex("AccountsIP")));
@@ -73,6 +74,12 @@ public class SetInvoiceActivity extends Activity {
         } else {
             ((CheckBox) findViewById(R.id.accountsYN)).setChecked(false);
         }
+        if (sellerInfoC.getString(sellerInfoC.getColumnIndex("QueueQRcode")).equals("YES")) {
+            ((CheckBox) findViewById(R.id.QueueQRcode)).setChecked(true);
+        } else {
+            ((CheckBox) findViewById(R.id.QueueQRcode)).setChecked(false);
+        }
+
         switch (sellerInfoC.getString(sellerInfoC.getColumnIndex("Machine"))) {
             case "BPT3":
                 ((RadioButton) findViewById(R.id.M1)).setChecked(true);
@@ -114,6 +121,8 @@ public class SetInvoiceActivity extends Activity {
         cv.put("POSSN", ((EditText) findViewById(R.id.POSSN)).getText().toString());
         cv.put("StoreID", ((EditText) findViewById(R.id.StoreID)).getText().toString());
         cv.put("Commodity", ((EditText) findViewById(R.id.Commodity)).getText().toString());
+        cv.put("WebSite", ((EditText) findViewById(R.id.website)).getText().toString());
+
         cv.put("InvoiceIP", ((EditText) findViewById(R.id.invoiceIP)).getText().toString());
         cv.put("InvoicePort", ((EditText) findViewById(R.id.invoicePort)).getText().toString());
         cv.put("AccountsIP", ((EditText) findViewById(R.id.accountsIP)).getText().toString());
@@ -123,6 +132,7 @@ public class SetInvoiceActivity extends Activity {
         cv.put("AccountsYN", ((CheckBox) findViewById(R.id.accountsYN)).isChecked() ? "YES" : "NO");
         cv.put("labelIP", ((EditText) findViewById(R.id.labelIP)).getText().toString());
         cv.put("labelPort", ((EditText) findViewById(R.id.labelPort)).getText().toString());
+        cv.put("QueueQRcode", ((CheckBox) findViewById(R.id.QueueQRcode)).isChecked() ? "YES" : "NO");
         SQLite sqLite = new SQLite(this);
         SQLiteDatabase db = sqLite.getReadableDatabase();
         db.update("sellerInfo", cv, "", null);
@@ -247,7 +257,7 @@ public class SetInvoiceActivity extends Activity {
             sendValue.put("SELLERID", sellerInfoC.getString(sellerInfoC.getColumnIndex("SELLERID")));
             sendValue.put("POSID", sellerInfoC.getString(sellerInfoC.getColumnIndex("POSID")));
             sendValue.put("POSSN", sellerInfoC.getString(sellerInfoC.getColumnIndex("POSSN")));
-            sendValue.put("WebSite", "xml.551.com.tw");
+            sendValue.put("WebSite", sellerInfoC.getString(sellerInfoC.getColumnIndex("WebSite")));
         }
 
         @Override

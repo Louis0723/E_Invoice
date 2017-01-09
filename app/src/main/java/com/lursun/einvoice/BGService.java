@@ -16,6 +16,8 @@ import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
+import com.sunmi.impl.V1Printer;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -60,7 +62,7 @@ public class BGService extends Service {
 
 
 
-                    Cursor searchC=db.rawQuery("Select * From history Where Serial= '"+((String)object[4])+"'  Order by _id Desc ",null);
+                    Cursor searchC=db.rawQuery("Select * From history Where Serial= '"+((String)object[4])+"' AND CANCEL_REASON IS NULL AND CANCEL_TIME IS NULL AND CANCEL_DATE  IS NULL  Order by _id Desc ",null);
                     if(searchC.getCount()>0){
                         searchC.moveToFirst();
                         final String INVOICENUMBER=searchC.getString(searchC.getColumnIndex("INVOICENUMBER"));;
@@ -220,6 +222,21 @@ public class BGService extends Service {
                                                 socket.close();
 
                                             }
+                                            else if(s.indexOf("客戶聯")>=0){
+
+                                                s=s.replaceAll("(.+\\D0|.+\\D0.00)\\n(.+[^\\d-]\\n){0,9}","");
+                                                s=s.replaceAll("\u001B!0\u001C!\\s\u001D!\u0011|\u001B!\u0010\u001C!\\s\u001D!\u0001|![\\w\\W]+?![\\w\\W]+?!","");
+                                                s=s.replaceFirst(".+","");
+
+                                                if(sellerInfoC.getString(sellerInfoC.getColumnIndex("Machine")).equals("商米"))
+                                                {
+                                                    V1Printer v1=new V1Printer(getApplicationContext());
+                                                    v1.beginTransaction();
+                                                    v1.printText(s);
+                                                    v1.commitTransaction();
+                                                }
+
+                                            }
                                             else if (s.indexOf("結帳單(賬務聯)")>0 && s.indexOf("客戶聯") < 0) {
                                                 Pattern getMoneyp = Pattern.compile("(?<=實收金額)[\\W\\w]+?(?>\\d+?\\.00)");
                                                 Matcher getMoneym = getMoneyp.matcher(s);
@@ -271,6 +288,26 @@ public class BGService extends Service {
                                                             os.close();
                                                             socket.close();
                                                         }
+                                                        if(sellerInfoC.getString(sellerInfoC.getColumnIndex("QueueQRcode")).equals("YES")) {
+                                                            EPSONPrint print = new EPSONPrint();
+                                                            Socket socket = new Socket(sellerInfoC.getString(sellerInfoC.getColumnIndex("InvoiceIP")), Integer.parseInt(sellerInfoC.getString(sellerInfoC.getColumnIndex("InvoicePort"))));
+                                                            s = String.format("http://admin.joyspots.net/queue/default.aspx?shopid=%s", sellerInfoC.getString(sellerInfoC.getColumnIndex("StoreID")));
+                                                            byte[] GS_k67 = {0x1D, '(', 'k', 0x03, 0x00, 0x31, 0x43, (byte) 0x06};//qrcoe size
+                                                            print.GS_k67 = GS_k67;
+                                                            byte[] ESCW = {(byte) 0x1B, 'W', 0x00, 0x00, 0x00, 0x00, (byte) 0xC8, (byte) 0x01, (byte) 0x60, (byte) 0x01};
+                                                            print.ESCW = ESCW;
+                                                            print.initPrint();
+                                                            print.SetXY(24, 0);
+                                                            print.Nomal("排隊查詢QRCode");
+                                                            print.SetXY(24, 5);
+                                                            print.QRcode(s, 0);
+                                                            print.Print();
+                                                            print.Cut();
+
+                                                            socket.getOutputStream().write(print.getPaper());
+                                                            socket.close();
+                                                        }
+
                                                     }
                                                 }
                                             }else {

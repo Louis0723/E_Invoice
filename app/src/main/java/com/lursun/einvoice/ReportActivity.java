@@ -55,6 +55,7 @@ public class ReportActivity extends Activity {
 
         tableScroll=(LinearLayout) findViewById(R.id.tableScroll);
 
+
         //---------------------------------------------------------------------------------------------
         makeReport();
         showEarnings();
@@ -108,12 +109,16 @@ public class ReportActivity extends Activity {
 
         int MM=Integer.parseInt(((EditText)findViewById(R.id.month)).getText().toString());
         if(((TextView)view).getText().toString().equals("▶")){
-            if(MMa.indexOf(++MM)>=0){
+            if(++MM==13)MM=1;
+            if(MMa.indexOf(MM)>=0){
                 ((EditText)findViewById(R.id.month)).setText(String.format("%02d",MM));
+                yyyy++;
             }
         }else {
-            if(MMa.indexOf(--MM)>=0){
+            if(--MM==0)MM=12;
+            if(MMa.indexOf(MM)>=0){
                 ((EditText)findViewById(R.id.month)).setText(String.format("%02d",MM));
+                yyyy--;
             }
         }
 
@@ -131,7 +136,7 @@ public class ReportActivity extends Activity {
         String dd= ((EditText)findViewById(R.id.day)).getText().toString();
         SQLite sqLite = new SQLite(this);
         final SQLiteDatabase db =sqLite.getReadableDatabase();
-        String sql="SELECT INVOICENUMBER , Serial , AMOUNT  , CANCEL_REASON , Submit1 , Submit2,MakeTime   FROM 'history' WHERE  MakeTime  LIKE '"+yyyy+"-"+MM+"-"+dd+"%' Order By _id DESC ";
+        String sql="SELECT INVOICENUMBER , Serial , AMOUNT  , CANCEL_REASON , Submit1 , Submit2,MakeTime,MESSAGE1,MESSAGE2   FROM 'history' WHERE  MakeTime  LIKE '"+yyyy+"-"+MM+"-"+dd+"%' Order By _id DESC ";
         Cursor c= db.rawQuery(sql,null);
         final View.OnLongClickListener OLC=new View.OnLongClickListener(){
             @Override
@@ -242,8 +247,13 @@ public class ReportActivity extends Activity {
                         ((TextView)LL.findViewById(R.id.upload)).setText("✘");
                         ((TextView)LL.findViewById(R.id.upload)).setTextColor(Color.rgb(255,0,0));
                     }else {
-                        ((TextView)LL.findViewById(R.id.upload)).setText("✔");
-                        ((TextView)LL.findViewById(R.id.upload)).setTextColor(Color.rgb(0,255,0));
+                        if((c.getString(c.getColumnIndex("MESSAGE2"))==null||c.getString(c.getColumnIndex("MESSAGE2")).equals("發票作廢成功"))&&c.getString(c.getColumnIndex("MESSAGE1")).equals("發票資料已轉入加值中心")) {
+                            ((TextView) LL.findViewById(R.id.upload)).setText("✔");
+                            ((TextView) LL.findViewById(R.id.upload)).setTextColor(Color.rgb(0, 255, 0));
+                        }else {
+                            ((TextView)LL.findViewById(R.id.upload)).setText("▲");
+                            ((TextView)LL.findViewById(R.id.upload)).setTextColor(Color.rgb(255,0,0));
+                        }
                     }
                 }else {
                     ((TextView)LL.findViewById(R.id.upload)).setText("✘");
@@ -262,9 +272,9 @@ public class ReportActivity extends Activity {
     public void errorCheck(View view){
         SQLite sqLite = new SQLite(this);
         SQLiteDatabase db =sqLite.getReadableDatabase();
-        Cursor c=db.rawQuery("select MESSAGE1 ,MESSAGE2 From history Where (Submit1 IS NOT NULL and  not (MESSAGE1  like \"%已上傳%\" or MESSAGE1  like \"%發票資料已轉入加值中心%\")) or (Submit2 IS NOT NULL and MESSAGE2 not like \"%發票作廢成功%\")",null);
+        Cursor c=db.rawQuery("select MESSAGE1 ,MESSAGE2,INVOICENUMBER From history Where (Submit1 IS NOT NULL and  not (MESSAGE1  like \"%已上傳%\" or MESSAGE1  like \"%發票資料已轉入加值中心%\")) or (Submit2 IS NOT NULL and MESSAGE2 not like \"%發票作廢成功%\")",null);
         if(c.moveToFirst())
-            new AlertDialog.Builder(ReportActivity.this).setTitle(c.getString(0)+"  "+c.getString(1)).setIcon(android.R.drawable.ic_dialog_info).setPositiveButton("确定", null).show();
+            new AlertDialog.Builder(ReportActivity.this).setTitle(c.getString(2)+"\n"+c.getString(0)+"  "+c.getString(1)).setIcon(android.R.drawable.ic_dialog_info).setPositiveButton("确定", null).show();
         else
             new AlertDialog.Builder(ReportActivity.this).setTitle("恩...你很健康").setIcon(android.R.drawable.ic_dialog_info).setPositiveButton("确定", null).show();
 

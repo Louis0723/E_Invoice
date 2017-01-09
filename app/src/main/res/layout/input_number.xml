@@ -147,10 +147,15 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         >
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
+            android:onClick="printQRcode"
+            android:id="@+id/printQRcode"
+            android:text="QRcode"
+            android:textSize="20dp"
             />
         <TextView
             android:layout_width="match_parent"

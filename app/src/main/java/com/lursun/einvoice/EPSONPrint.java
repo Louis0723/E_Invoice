@@ -20,8 +20,8 @@ public class EPSONPrint
     byte[] GSh={0x1D,'h',0x40};
     byte[] GSw={0x1D,'w',0x01};
     byte[] GSk={0x1D,'k',0x45,0x13};
-    byte[] GS_k65={0x1D,'(','k',0x04,0x00,0x31,0x41,0x32,0x00};//qrcode model
-    public byte[] GS_k67={0x1D,'(','k',0x03,0x00,0x31,0x43,0x03};//qrcoe size
+    byte[] GS_k65={0x1D,'(','k',0x04,0x00,0x31,0x41,0x33,0x00};//qrcode model
+    public byte[] GS_k67={0x1D,'(','k',0x03,0x00,0x31,0x43,(byte)0x03};//qrcoe size
     byte[] GS_k69={0x1D,'(','k',0x03,0x00,0x31,0x45,0x31};//qrcode level
     byte[] GS_k80_dataHeader={0x1D,'(','k'};
     byte[] GS_k80_datafoot={0x31,0x50,0x30};
@@ -57,6 +57,12 @@ public class EPSONPrint
     public void Barcode(String s){
         paper=link(paper,GSH,GSh,GSw,GSk,s.getBytes(),GS_k81);
     }
+    public void QRcode(String s,int size){
+        byte[] data=fillup(s,size);
+        byte[] pL={(byte) ((data.length+3) % 256)};
+        byte[] pH={(byte) ((data.length+3) / 256)};
+        paper=link(paper,GS_k65,GS_k67,GS_k69,GS_k80_dataHeader,pL,pH,GS_k80_datafoot,fillup(s,size),GS_k81);
+    }
     public void QRcode(String s){
         byte[] data=fillup(s);
         byte[] pL={(byte) ((data.length+3) % 256)};
@@ -88,6 +94,20 @@ public class EPSONPrint
     }
     public byte[] fillup(String s){
         int SIZE=170;
+        byte[] temp=new byte[SIZE];
+        byte[] bytes= s.getBytes();
+        for(int i = 0 ;i<SIZE;i++){
+            temp[i]=0x20;
+        }
+        if(bytes.length<SIZE){
+            for(int i=0;i<bytes.length;i++){
+                temp[i]=bytes[i];
+            }
+        }else temp=bytes;
+        return temp;
+    };
+    public byte[] fillup(String s,int size){
+        int SIZE=size;
         byte[] temp=new byte[SIZE];
         byte[] bytes= s.getBytes();
         for(int i = 0 ;i<SIZE;i++){

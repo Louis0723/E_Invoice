@@ -26,12 +26,13 @@ public class SendData {
     private String send(String data) throws Exception
     {
 
-            Socket socket = new Socket("xml.551.com.tw", 80);
+
+            Socket socket = new Socket(SQLite.website, 80);
             OutputStream os = socket.getOutputStream();
             InputStreamReader isr = new InputStreamReader(socket.getInputStream());
 
             data="POST / HTTP/1.1\n" +
-                    "Host: xml.551.com.tw\n" +
+                    "Host: "+SQLite.website+"\n" +
                     "User-Agent: curl/7.50.2\n" +
                     "Accept: */*\n" +
                     "Content-Length: "+data.getBytes().length+"\n" +
